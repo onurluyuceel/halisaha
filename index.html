@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halı Saha Ligi</title>
     <style>
-        /* --- GENEL TASARIM --- */
+        /* --- GENEL --- */
         body { background-color: #121212; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 100px; }
         a { color: #4caf50; text-decoration: none; }
 
@@ -20,7 +20,7 @@
         .active-section { display: block !important; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- LİSTE VE KARTLAR --- */
+        /* --- MAÇ KARTLARI --- */
         .match-list-item { background: #1e1e1e; margin-bottom: 15px; border-radius: 8px; overflow: hidden; border-left: 5px solid #4caf50; }
         .match-summary { padding: 15px; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.2s; }
         .match-summary:hover { background: #252525; }
@@ -28,24 +28,60 @@
         .match-score-txt { font-size: 1.8rem; font-weight: bold; letter-spacing: 2px; }
         .match-detail-container { display: none; padding: 10px; background: #151515; border-top: 1px solid #333; }
         
-        .player-card { background: #1e1e1e; padding: 15px; text-align: center; border-radius: 8px; border: 1px solid #333; display: inline-block; width: 100px; margin: 10px; vertical-align: top; }
+        /* --- OYUNCU KARTLARI (LİSTE) --- */
+        .player-card { 
+            background: #1e1e1e; padding: 15px; text-align: center; 
+            border-radius: 8px; border: 1px solid #333; 
+            display: inline-block; width: 100px; margin: 10px; 
+            vertical-align: top; cursor: pointer; transition: transform 0.2s; 
+        }
+        .player-card:hover { transform: translateY(-5px); border-color: #4caf50; }
         .player-card img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #333; }
+
+        /* --- YENİ: OYUNCU PROFİL MODALI (SENİN TASARIMIN) --- */
+        #profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .profile-content { background: #1e1e1e; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: 15px; border: 1px solid #444; position: relative; }
+        .profile-close { position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: #aaa; font-size: 1.5rem; cursor: pointer; }
+        
+        .profile-header { display: flex; align-items: center; padding: 30px 20px; border-bottom: 1px solid #333; gap: 20px; }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #4caf50; }
+        .profile-info h2 { margin: 0; font-size: 1.8rem; color: white; }
+        .profile-info p { margin: 5px 0 0; color: #888; font-size: 0.9rem; }
+        
+        .profile-stats-row { display: flex; justify-content: space-around; padding: 15px; background: #252525; margin-bottom: 10px; }
+        .p-stat-box { text-align: center; }
+        .p-stat-val { font-size: 1.4rem; font-weight: bold; color: #4caf50; }
+        .p-stat-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
+
+        .profile-history { padding: 20px; }
+        .history-title { font-size: 0.9rem; color: #888; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        
+        .history-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #151515; padding: 12px; margin-bottom: 8px; 
+            border-radius: 6px; cursor: pointer; transition: 0.2s; border-left: 3px solid #555;
+        }
+        .history-item:hover { background: #333; border-left-color: #4caf50; }
+        .h-match-info { font-size: 0.9rem; font-weight: bold; }
+        .h-match-date { font-size: 0.75rem; color: #666; }
+        .h-match-perf { font-size: 0.8rem; color: #ddd; }
+        .perf-tag { background: #333; padding: 2px 6px; border-radius: 4px; margin-left: 5px; font-size: 0.7rem; }
+        .perf-g { color: #2ecc71; }
+        .perf-a { color: #f39c12; }
+
 
         /* --- ADMIN --- */
         .admin-only { display: none; }
         .admin-box { background: #252525; border: 1px solid #444; padding: 20px; margin-bottom: 20px; border-radius: 10px; display: none; }
         input, select { padding: 12px; background: #333; color: white; border: 1px solid #555; width: 100%; box-sizing: border-box; margin-bottom: 15px; border-radius: 6px; outline: none; }
-        
         .score-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin-bottom: 15px; }
         .score-input { width: 70px; text-align: center; font-size: 1.5rem; font-weight: bold; height: 50px; background: #1a1a1a; border: 2px solid #4caf50; }
-        
         .btn { width: 100%; padding: 12px; border: none; cursor: pointer; border-radius: 6px; font-weight: bold; font-size: 1rem; transition: 0.2s; }
         .btn-green { background: #27ae60; color: white; }
-        
         .json-area { background: #000; color: #0f0; font-family: monospace; padding: 15px; display: none; margin-top: 15px; border-radius: 6px; border: 1px dashed #4caf50; }
         textarea { width: 100%; height: 100px; background: transparent; color: inherit; border: none; resize: vertical; outline: none; }
 
-        /* --- SAHA (PITCH) --- */
+        /* --- SAHA --- */
         .pitch { 
             background: linear-gradient(180deg, #2e7d32 0%, #388e3c 50%, #2e7d32 100%); 
             height: 600px; border-radius: 12px; 
@@ -58,43 +94,30 @@
         
         .p-row { display: flex; justify-content: center; gap: 15px; position: relative; z-index: 2; }
         .p-slot { text-align: center; width: 70px; position: relative; height: 90px;}
-        
         .p-circle { 
             width: 50px; height: 50px; border-radius: 50%; 
             background: rgba(0,0,0,0.3); border: 2px dashed rgba(255,255,255,0.4); 
             margin: 0 auto; display: flex; align-items: center; justify-content: center; 
-            overflow: visible; 
-            position: relative;
+            overflow: visible; position: relative;
         }
         .p-circle.filled { background: #fff; border: 2px solid #fff; }
         .p-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%;}
-        
         .p-name {
             background: rgba(0,0,0,0.8); color: white; padding: 2px 6px; 
             border-radius: 4px; font-size: 0.65rem; margin-top: 5px; 
             display: inline-block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
         }
 
-        /* --- ROZETLER --- */
-        .stat-badge-read {
-            position: absolute; width: 20px; height: 20px; border-radius: 50%;
-            color: white; font-weight: bold; font-size: 0.7rem;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 10;
-        }
+        /* --- ROZETLER & MODAL --- */
+        .stat-badge-read { position: absolute; width: 20px; height: 20px; border-radius: 50%; color: white; font-weight: bold; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; border: 1px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); z-index: 10; }
         .badge-goal { background: #27ae60; top: -5px; right: -5px; } 
         .badge-assist { background: #d35400; top: -5px; left: -5px; } 
-
-        /* --- BUILDER INPUT --- */
         .stat-input-container { display: flex; justify-content: center; gap: 2px; margin-top: 2px; position: absolute; width:100%; bottom: 0; }
         .stat-input-box { width: 25px; font-size: 0.7rem; text-align: center; border:none; border-radius: 3px; }
-
-        /* --- MODAL --- */
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-body { background: #222; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; padding: 20px; border-radius: 12px; border: 1px solid #444; }
         .m-item { padding: 12px; border-bottom: 1px solid #333; cursor: pointer; display: flex; align-items: center; gap: 15px; }
         .m-item:hover { background: #333; }
-        
         #error-log { color: #e74c3c; padding: 15px; text-align: center; display: none; background: rgba(231, 76, 60, 0.1); border-radius: 8px; margin: 20px; border: 1px solid #e74c3c; }
     </style>
 </head>
@@ -116,9 +139,7 @@
 
     <div id="matches" class="page-section">
         <h2 style="border-bottom: 1px solid #333; padding-bottom: 15px;">Fikstür</h2>
-        
         <button class="admin-only btn btn-green" onclick="toggleBox('match-builder')">+ YENİ MAÇ OLUŞTUR</button>
-
         <div id="match-builder" class="admin-box">
             <h3 style="color:#4caf50; margin-top:0;">Maç Detayları</h3>
             <input type="text" id="m-date" placeholder="Tarih (Örn: 02.02.2026)">
@@ -127,52 +148,70 @@
                 <span style="font-size:1.5rem; color:#aaa;">-</span> 
                 <input type="number" id="sc-b" class="score-input" placeholder="0" min="0" onchange="checkNeg(this)">
             </div>
-
             <h4 style="color:#e74c3c">A Takımı</h4>
             <select id="fmt-a" onchange="refreshBuilder()">
-                <option value="3-3-1">3-3-1</option>
-                <option value="3-2-2">3-2-2</option>
-                <option value="2-4-1">2-4-1</option>
+                <option value="3-3-1">3-3-1</option> <option value="3-2-2">3-2-2</option> <option value="2-4-1">2-4-1</option>
             </select>
             <div id="pitch-a" class="pitch"></div>
-
             <h4 style="color:#3498db; margin-top:20px;">B Takımı</h4>
             <select id="fmt-b" onchange="refreshBuilder()">
-                <option value="3-3-1">3-3-1</option>
-                <option value="3-2-2">3-2-2</option>
-                <option value="2-4-1">2-4-1</option>
+                <option value="3-3-1">3-3-1</option> <option value="3-2-2">3-2-2</option> <option value="2-4-1">2-4-1</option>
             </select>
             <div id="pitch-b" class="pitch"></div>
-
             <button class="btn btn-green" style="margin-top:20px;" onclick="createMatchJSON()">JSON KODUNU OLUŞTUR</button>
-            <div id="match-json-area" class="json-area">
-                <textarea id="match-json-text" onclick="this.select()"></textarea>
-            </div>
+            <div id="match-json-area" class="json-area"><textarea id="match-json-text" onclick="this.select()"></textarea></div>
         </div>
-
         <div id="match-list">Veriler yükleniyor...</div>
     </div>
 
     <div id="players" class="page-section">
         <h2 style="border-bottom: 1px solid #333; padding-bottom: 15px;">Kadro</h2>
         <button class="admin-only btn btn-green" onclick="toggleBox('player-builder')">+ YENİ OYUNCU EKLE</button>
-
         <div id="player-builder" class="admin-box">
             <h3 style="color:#4caf50;">Oyuncu Ekle</h3>
             <input type="text" id="p-name" placeholder="Oyuncu Adı">
             <select id="p-pos">
-                <option value="GK">Kaleci</option>
-                <option value="DEF">Defans</option>
-                <option value="OS">Orta Saha</option>
-                <option value="FW">Forvet</option>
+                <option value="GK">Kaleci</option> <option value="DEF">Defans</option> <option value="OS">Orta Saha</option> <option value="FW">Forvet</option>
             </select>
             <button class="btn btn-green" onclick="createPlayerJSON()">JSON OLUŞTUR</button>
-            <div id="player-json-area" class="json-area">
-                <textarea id="player-json-text" onclick="this.select()"></textarea>
+            <div id="player-json-area" class="json-area"><textarea id="player-json-text" onclick="this.select()"></textarea></div>
+        </div>
+        <div id="player-list"></div>
+    </div>
+
+    <div id="profile-modal">
+        <div class="profile-content">
+            <button class="profile-close" onclick="closeProfile()">×</button>
+            
+            <div class="profile-header">
+                <img id="pp-img" class="profile-img" src="">
+                <div class="profile-info">
+                    <h2 id="pp-name">İsim Soyisim</h2>
+                    <p id="pp-pos">Mevki</p>
+                </div>
+            </div>
+
+            <div class="profile-stats-row">
+                <div class="p-stat-box">
+                    <div class="p-stat-val" id="pp-matches">0</div>
+                    <div class="p-stat-label">Maç</div>
+                </div>
+                <div class="p-stat-box">
+                    <div class="p-stat-val" id="pp-goals">0</div>
+                    <div class="p-stat-label">Gol</div>
+                </div>
+                <div class="p-stat-box">
+                    <div class="p-stat-val" id="pp-assists">0</div>
+                    <div class="p-stat-label">Asist</div>
+                </div>
+            </div>
+
+            <div class="profile-history">
+                <div class="history-title">OYNADIĞI MAÇLAR</div>
+                <div id="pp-history-list">
+                    </div>
             </div>
         </div>
-
-        <div id="player-list"></div>
     </div>
 
     <div id="modal-overlay">
@@ -207,10 +246,9 @@
             fetch('matches.json').then(r=>r.json()).then(d => { 
                 allMatches = d;
                 if(d.length > 0) {
-                    const lastMatch = d[d.length - 1];
-                    renderReadOnlyMatch(lastMatch, 'home-match-container');
+                    renderReadOnlyMatch(d[d.length - 1], 'home-match-container');
                 } else {
-                    document.getElementById('home-match-container').innerHTML = "<p style='text-align:center'>Henüz maç oynanmadı.</p>";
+                    document.getElementById('home-match-container').innerHTML = "<p style='text-align:center'>Maç yok.</p>";
                 }
                 renderMatchList(d);
             });
@@ -221,13 +259,99 @@
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-section'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active-section');
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
         }
 
+        // --- YENİ: PROFİL AÇMA MANTIĞI ---
+        function openPlayerProfile(playerId) {
+            const player = allPlayers.find(p => p.id === playerId);
+            if(!player) return;
+
+            // 1. Temel Bilgileri Doldur
+            document.getElementById('pp-img').src = player.image;
+            document.getElementById('pp-name').innerText = player.name;
+            document.getElementById('pp-pos').innerText = player.position;
+
+            // 2. İstatistikleri Hesapla
+            let totalMatches = 0;
+            let totalGoals = 0;
+            let totalAssists = 0;
+            let historyHTML = '';
+
+            // Tüm maçları tersten tara (Yeniden eskiye)
+            allMatches.slice().reverse().forEach(m => {
+                // Oyuncu bu maçta var mı?
+                const inTeamA = m.teamA.find(x => (x.id || x.playerId) === playerId);
+                const inTeamB = m.teamB.find(x => (x.id || x.playerId) === playerId);
+                
+                const stats = inTeamA || inTeamB;
+
+                if(stats) {
+                    totalMatches++;
+                    totalGoals += (stats.g || 0);
+                    totalAssists += (stats.a || 0);
+
+                    // Performans Etiketleri
+                    let perfTags = '';
+                    if(stats.g > 0) perfTags += `<span class="perf-tag perf-g">${stats.g} Gol</span>`;
+                    if(stats.a > 0) perfTags += `<span class="perf-tag perf-a">${stats.a} Asist</span>`;
+                    if(perfTags === '') perfTags = '<span style="font-size:0.7rem; color:#444; margin-left:5px;">İstatistik yok</span>';
+
+                    // Listeye Ekle (Tıklanınca maça git)
+                    historyHTML += `
+                        <div class="history-item" onclick="goToMatch(${m.id})">
+                            <div>
+                                <div class="h-match-info">MAÇ #${m.id} <span style="font-weight:normal; color:#888;">| ${m.score}</span></div>
+                                <div class="h-match-date">${m.date}</div>
+                            </div>
+                            <div class="h-match-perf">${perfTags}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            // 3. İstatistikleri Yaz
+            document.getElementById('pp-matches').innerText = totalMatches;
+            document.getElementById('pp-goals').innerText = totalGoals;
+            document.getElementById('pp-assists').innerText = totalAssists;
+            
+            // 4. Listeyi Yaz
+            if(historyHTML === '') historyHTML = '<div style="color:#666; font-style:italic;">Henüz maça çıkmadı.</div>';
+            document.getElementById('pp-history-list').innerHTML = historyHTML;
+
+            // 5. Modalı Aç
+            document.getElementById('profile-modal').style.display = 'flex';
+        }
+
+        function closeProfile() {
+            document.getElementById('profile-modal').style.display = 'none';
+        }
+
+        // --- PROFİLDEN MAÇA GİTME ---
+        function goToMatch(matchId) {
+            closeProfile(); // Profili kapat
+            showTab('matches', document.querySelectorAll('.nav-btn')[1]); // Maçlar sekmesine git
+            
+            // Maç detayını aç (Eğer kapalıysa)
+            const detailDiv = document.getElementById(`detail-${matchId}`);
+            if(detailDiv && detailDiv.style.display !== 'block') {
+                toggleMatchDetail(`detail-${matchId}`);
+            }
+            
+            // Oraya kaydır
+            setTimeout(() => {
+                const element = detailDiv.parentElement;
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Vurgula
+                element.style.border = "2px solid white";
+                setTimeout(() => { element.style.border = "none"; element.style.borderLeft = "5px solid #4caf50"; }, 1000);
+            }, 100);
+        }
+
+        // --- MAÇ OKUMA FONKSİYONLARI ---
         function renderReadOnlyMatch(match, containerId) {
             const container = document.getElementById(containerId);
             const scoreSplit = match.score.split('-'); 
-            
             let html = `
                 <div style="background:#222; padding:20px; border-radius:10px; border:1px solid #333;">
                     <div style="text-align:center; margin-bottom:20px;">
@@ -237,41 +361,30 @@
                         </div>
                     </div>
                     <div class="pitch" style="height:550px;">
-                        ${getReadOnlyTeamHTML(match.teamA, match.formationA, 'teamA')}
-                        ${getReadOnlyTeamHTML(match.teamB, match.formationB, 'teamB')}
+                        ${getReadOnlyTeamHTML(match.teamA, match.formationA)}
+                        ${getReadOnlyTeamHTML(match.teamB, match.formationB)}
                     </div>
                 </div>`;
             container.innerHTML = html;
         }
 
-        function getReadOnlyTeamHTML(teamData, formation, teamKey) {
+        function getReadOnlyTeamHTML(teamData, formation) {
             const rows = formations[formation];
             let slotIndex = 0;
             let html = '';
-
             rows.forEach(count => {
                 html += `<div class="p-row">`;
                 for(let i=0; i<count; i++) {
                     const pData = teamData[slotIndex]; 
                     let content = `<div class="p-circle"></div>`; 
-
                     if(pData) {
-                        // FIX: Hem 'id' hem 'playerId' kontrolü yapıyoruz.
                         const correctId = pData.id || pData.playerId;
                         const pInfo = allPlayers.find(p => p.id === correctId);
-                        
                         if(pInfo) {
                             let badges = '';
                             if(pData.g > 0) badges += `<div class="stat-badge-read badge-goal">⚽${pData.g > 1 ? pData.g : ''}</div>`;
                             if(pData.a > 0) badges += `<div class="stat-badge-read badge-assist">👟${pData.a > 1 ? pData.a : ''}</div>`;
-
-                            content = `
-                                <div class="p-circle filled">
-                                    <img src="${pInfo.image}">
-                                    ${badges}
-                                </div>
-                                <div class="p-name">${pInfo.name}</div>
-                            `;
+                            content = `<div class="p-circle filled"><img src="${pInfo.image}">${badges}</div><div class="p-name">${pInfo.name}</div>`;
                         }
                     }
                     html += `<div class="p-slot" style="height:auto; margin-bottom:5px;">${content}</div>`;
@@ -286,15 +399,11 @@
             const div = document.getElementById('match-list');
             div.innerHTML = "";
             if(list.length === 0) { div.innerHTML = "Maç yok."; return; }
-            
             list.slice().reverse().forEach(m => {
                 div.innerHTML += `
                     <div class="match-list-item">
                         <div class="match-summary" onclick="toggleMatchDetail('detail-${m.id}')">
-                            <div class="match-header-txt">
-                                <span>MAÇ #${m.id}</span>
-                                <span>${m.date}</span>
-                            </div>
+                            <div class="match-header-txt"><span>MAÇ #${m.id}</span><span>${m.date}</span></div>
                             <div class="match-score-txt">${m.score}</div>
                             <div style="font-size:0.7rem; color:#666; margin-top:5px;">Detayları Göster/Gizle ▼</div>
                         </div>
@@ -305,9 +414,8 @@
 
         function toggleMatchDetail(id) {
             const el = document.getElementById(id);
-            if(el.style.display === 'block') {
-                el.style.display = 'none';
-            } else {
+            if(el.style.display === 'block') { el.style.display = 'none'; } 
+            else {
                 if(el.innerHTML.trim() === "") {
                     const matchId = parseInt(id.split('-')[1]);
                     const match = allMatches.find(m => m.id === matchId);
@@ -317,117 +425,11 @@
             }
         }
 
-        function refreshBuilder() {
-            renderBuilderPitch('pitch-a', 'teamA', document.getElementById('fmt-a').value);
-            renderBuilderPitch('pitch-b', 'teamB', document.getElementById('fmt-b').value);
-        }
-
-        function renderBuilderPitch(divId, teamKey, fmt) {
-            const container = document.getElementById(divId);
-            container.innerHTML = "";
-            const rows = formations[fmt];
-            let slotIndex = 0;
-
-            rows.forEach(count => {
-                const row = document.createElement('div'); row.className = 'p-row';
-                for(let i=0; i<count; i++) {
-                    const idx = slotIndex;
-                    const pData = draft[teamKey][idx];
-                    let content = `<div class="p-circle">+</div>`;
-                    
-                    if(pData) {
-                        const correctId = pData.id || pData.playerId;
-                        const pInfo = allPlayers.find(p => p.id === correctId);
-                        if(pInfo) {
-                            content = `
-                            <div class="p-circle filled"><img src="${pInfo.image}"></div>
-                            <div class="p-name">${pInfo.name}</div>
-                            <div class="stat-input-container" onclick="event.stopPropagation()">
-                                <input type="number" class="stat-input-box" style="background:#27ae60;color:white" placeholder="G" value="${pData.g}" onchange="updateStat('${teamKey}',${idx},'g',this)">
-                                <input type="number" class="stat-input-box" style="background:#d35400;color:white" placeholder="A" value="${pData.a}" onchange="updateStat('${teamKey}',${idx},'a',this)">
-                            </div>`;
-                        }
-                    }
-                    const slot = document.createElement('div'); slot.className = 'p-slot';
-                    slot.innerHTML = content;
-                    slot.onclick = () => openModal(teamKey, idx);
-                    row.appendChild(slot);
-                    slotIndex++;
-                }
-                container.appendChild(row);
-            });
-        }
-
-        function openModal(team, idx) {
-            activeSelection = { team, slot: idx };
-            const modal = document.getElementById('modal-overlay');
-            const list = document.getElementById('modal-list');
-            list.innerHTML = "";
-            
-            const usedIds = [...draft.teamA, ...draft.teamB].filter(x=>x).map(x=>x.id || x.playerId);
-            const currentData = draft[team][idx];
-            const currentId = currentData ? (currentData.id || currentData.playerId) : null;
-
-            allPlayers.forEach(p => {
-                if(usedIds.includes(p.id) && p.id !== currentId) return;
-                const item = document.createElement('div');
-                item.className = 'm-item';
-                item.innerHTML = `<img src="${p.image}" style="width:40px;height:40px;border-radius:50%"> ${p.name}`;
-                item.onclick = () => selectPlayer(p.id);
-                list.appendChild(item);
-            });
-            
-            const removeBtn = document.createElement('div');
-            removeBtn.className = 'm-item'; removeBtn.style.color = 'red'; removeBtn.innerHTML = "❌ Boşalt";
-            removeBtn.onclick = () => { delete draft[activeSelection.team][activeSelection.slot]; refreshBuilder(); closeModal(); };
-            list.appendChild(removeBtn);
-
-            modal.style.display = 'flex';
-        }
-
-        function selectPlayer(id) {
-            // FIX: Kaydederken 'id' anahtar kelimesini kullanıyoruz
-            draft[activeSelection.team][activeSelection.slot] = { id: id, g:0, a:0 };
-            refreshBuilder(); closeModal();
-        }
-        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-        function updateStat(t, i, k, el) { if(el.value<0) el.value=0; if(draft[t][i]) draft[t][i][k] = parseInt(el.value)||0; }
-        function checkNeg(el) { if(el.value<0) el.value=0; }
-
-        function createMatchJSON() {
-            const d = document.getElementById('m-date').value;
-            const sa = document.getElementById('sc-a').value;
-            const sb = document.getElementById('sc-b').value;
-            if(!d || sa==="" || sb==="") return alert("Eksik bilgi!");
-            
-            const newId = allMatches.length > 0 ? allMatches[allMatches.length-1].id + 1 : 1;
-            const obj = {
-                id: newId, date: d, score: `${sa} - ${sb}`,
-                formationA: document.getElementById('fmt-a').value,
-                formationB: document.getElementById('fmt-b').value,
-                // FIX: JSON oluştururken de 'id' kullanıyoruz
-                teamA: draft.teamA.filter(x=>x).map(x => ({ id: x.id || x.playerId, g: x.g, a: x.a })),
-                teamB: draft.teamB.filter(x=>x).map(x => ({ id: x.id || x.playerId, g: x.g, a: x.a }))
-            };
-            
-            const final = [...allMatches, obj];
-            document.getElementById('match-json-area').style.display = 'block';
-            document.getElementById('match-json-text').value = JSON.stringify(final, null, 2);
-        }
-        
-        function createPlayerJSON() {
-            const n = document.getElementById('p-name').value;
-            if(!n) return alert("İsim?");
-            const newId = allPlayers.length > 0 ? Math.max(...allPlayers.map(p=>p.id))+1 : 1;
-            const obj = { id: newId, name: n, image: "https://i.pravatar.cc/150?u="+newId, position: document.getElementById('p-pos').value, rating: 6.0, goals: 0 };
-            document.getElementById('player-json-area').style.display='block';
-            document.getElementById('player-json-text').value = ",\n" + JSON.stringify(obj, null, 2);
-        }
-        
+        // --- OYUNCU LİSTESİ ---
         function renderPlayers(list) {
             const div = document.getElementById('player-list');
             div.innerHTML = list.map(p => `
-                <div class="player-card">
+                <div class="player-card" onclick="openPlayerProfile(${p.id})">
                     <img src="${p.image}">
                     <div style="font-size:0.8rem; font-weight:bold; margin-top:5px;">${p.name}</div>
                     <div style="font-size:0.7rem; color:#888;">${p.position}</div>
@@ -435,13 +437,61 @@
             `).join('');
         }
 
-        function checkAdmin() {
-            const ia = localStorage.getItem('siteAdmin');
-            const els = document.querySelectorAll('.admin-only');
-            els.forEach(e => e.style.display = ia ? 'block' : 'none');
-            document.getElementById('login-txt').style.display = ia ? 'none' : 'inline';
-            document.getElementById('logout-txt').style.display = ia ? 'inline' : 'none';
+        // --- BUILDER & ADMIN ---
+        function refreshBuilder() {
+            renderBuilderPitch('pitch-a', 'teamA', document.getElementById('fmt-a').value);
+            renderBuilderPitch('pitch-b', 'teamB', document.getElementById('fmt-b').value);
         }
+        function renderBuilderPitch(divId, teamKey, fmt) {
+            const container = document.getElementById(divId); container.innerHTML = "";
+            let slotIndex = 0;
+            formations[fmt].forEach(count => {
+                const row = document.createElement('div'); row.className = 'p-row';
+                for(let i=0; i<count; i++) {
+                    const idx = slotIndex; const pData = draft[teamKey][idx];
+                    let content = `<div class="p-circle">+</div>`;
+                    if(pData) {
+                        const correctId = pData.id || pData.playerId; const pInfo = allPlayers.find(p => p.id === correctId);
+                        if(pInfo) content = `<div class="p-circle filled"><img src="${pInfo.image}"></div><div class="p-name">${pInfo.name}</div><div class="stat-input-container" onclick="event.stopPropagation()"><input type="number" class="stat-input-box" style="background:#27ae60;color:white" placeholder="G" value="${pData.g}" onchange="updateStat('${teamKey}',${idx},'g',this)"><input type="number" class="stat-input-box" style="background:#d35400;color:white" placeholder="A" value="${pData.a}" onchange="updateStat('${teamKey}',${idx},'a',this)"></div>`;
+                    }
+                    const slot = document.createElement('div'); slot.className = 'p-slot'; slot.innerHTML = content;
+                    slot.onclick = () => openModal(teamKey, idx); row.appendChild(slot); slotIndex++;
+                }
+                container.appendChild(row);
+            });
+        }
+        function openModal(team, idx) {
+            activeSelection = { team, slot: idx };
+            const modal = document.getElementById('modal-overlay'); const list = document.getElementById('modal-list'); list.innerHTML = "";
+            const usedIds = [...draft.teamA, ...draft.teamB].filter(x=>x).map(x=>x.id || x.playerId);
+            const curData = draft[team][idx]; const curId = curData ? (curData.id || curData.playerId) : null;
+            allPlayers.forEach(p => {
+                if(usedIds.includes(p.id) && p.id !== curId) return;
+                const item = document.createElement('div'); item.className = 'm-item'; item.innerHTML = `<img src="${p.image}" style="width:40px;height:40px;border-radius:50%"> ${p.name}`; item.onclick = () => selectPlayer(p.id); list.appendChild(item);
+            });
+            const removeBtn = document.createElement('div'); removeBtn.className = 'm-item'; removeBtn.style.color = 'red'; removeBtn.innerHTML = "❌ Boşalt";
+            removeBtn.onclick = () => { delete draft[activeSelection.team][activeSelection.slot]; refreshBuilder(); closeModal(); }; list.appendChild(removeBtn);
+            modal.style.display = 'flex';
+        }
+        function selectPlayer(id) { draft[activeSelection.team][activeSelection.slot] = { id: id, g:0, a:0 }; refreshBuilder(); closeModal(); }
+        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+        function updateStat(t, i, k, el) { if(el.value<0) el.value=0; if(draft[t][i]) draft[t][i][k] = parseInt(el.value)||0; }
+        function checkNeg(el) { if(el.value<0) el.value=0; }
+        
+        function createMatchJSON() {
+            const d = document.getElementById('m-date').value; const sa = document.getElementById('sc-a').value; const sb = document.getElementById('sc-b').value;
+            if(!d || sa==="" || sb==="") return alert("Eksik bilgi!");
+            const newId = allMatches.length > 0 ? allMatches[allMatches.length-1].id + 1 : 1;
+            const obj = { id: newId, date: d, score: `${sa} - ${sb}`, formationA: document.getElementById('fmt-a').value, formationB: document.getElementById('fmt-b').value, teamA: draft.teamA.filter(x=>x).map(x => ({ id: x.id || x.playerId, g: x.g, a: x.a })), teamB: draft.teamB.filter(x=>x).map(x => ({ id: x.id || x.playerId, g: x.g, a: x.a })) };
+            const final = [...allMatches, obj]; document.getElementById('match-json-area').style.display = 'block'; document.getElementById('match-json-text').value = JSON.stringify(final, null, 2);
+        }
+        function createPlayerJSON() {
+            const n = document.getElementById('p-name').value; if(!n) return alert("İsim?");
+            const newId = allPlayers.length > 0 ? Math.max(...allPlayers.map(p=>p.id))+1 : 1;
+            const obj = { id: newId, name: n, image: "https://i.pravatar.cc/150?u="+newId, position: document.getElementById('p-pos').value, rating: 6.0, goals: 0 };
+            document.getElementById('player-json-area').style.display='block'; document.getElementById('player-json-text').value = ",\n" + JSON.stringify(obj, null, 2);
+        }
+        function checkAdmin() { const ia = localStorage.getItem('siteAdmin'); const els = document.querySelectorAll('.admin-only'); els.forEach(e => e.style.display = ia ? 'block' : 'none'); document.getElementById('login-txt').style.display = ia ? 'none' : 'inline'; document.getElementById('logout-txt').style.display = ia ? 'inline' : 'none'; }
         function adminLogin() { if(prompt("Şifre:")==="1234"){localStorage.setItem('siteAdmin','true'); location.reload();} }
         function adminLogout() { localStorage.removeItem('siteAdmin'); location.reload(); }
         function toggleBox(id) { const el=document.getElementById(id); el.style.display = el.style.display==='none'?'block':'none'; }
