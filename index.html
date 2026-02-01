@@ -5,95 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halı Saha Ligi</title>
     <style>
-        /* --- GENEL TASARIM --- */
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background-color: #121212; color: white; padding-bottom: 80px; }
+        /* --- TEMEL AYARLAR --- */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; padding-bottom: 100px; }
         
-        /* NAVİGASYON */
-        .navbar { display: flex; justify-content: center; background: #1e1e1e; padding: 15px; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
-        .nav-btn { background: none; border: none; color: #aaa; font-size: 1rem; margin: 0 15px; cursor: pointer; padding: 5px 10px; transition: 0.3s; }
+        /* --- MENÜ (NAVBAR) --- */
+        .navbar { 
+            display: flex; justify-content: center; gap: 10px; 
+            background: #1e1e1e; padding: 15px; border-bottom: 2px solid #333; 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        .nav-btn { 
+            background: none; border: none; color: #aaa; font-size: 1rem; 
+            cursor: pointer; padding: 8px 12px; transition: 0.3s; 
+        }
         .nav-btn:hover { color: white; }
         .nav-btn.active { color: #4caf50; border-bottom: 2px solid #4caf50; font-weight: bold; }
 
+        /* --- SAYFA YAPISI --- */
         .page-section { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .active-section { display: block; }
+        .active-section { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- MAÇLAR SAYFASI --- */
-        .matches-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .admin-btn { background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none; } /* Admin only */
+        /* --- ANA SAYFA --- */
+        .hero { text-align: center; margin-top: 50px; }
+        .hero h1 { color: #4caf50; font-size: 2.5rem; margin-bottom: 10px; }
 
-        .match-card { background: #1e1e1e; margin-bottom: 15px; padding: 15px; border-radius: 8px; border-left: 5px solid #4caf50; }
-        .match-card-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: #aaa; margin-bottom: 5px; }
-        .match-card-score { font-size: 1.5rem; font-weight: bold; text-align: center; margin: 10px 0; }
-
-        /* --- BUILDER (MAÇ OLUŞTURUCU) --- */
-        #match-builder-area { display: none; background: #1a1a1a; padding: 15px; border: 1px solid #333; border-radius: 10px; margin-top: 20px; }
-        .builder-box { background: #252525; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+        /* --- MAÇLAR VE KARTLAR --- */
+        .match-card { background: #1e1e1e; border-left: 5px solid #4caf50; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .match-header { display: flex; justify-content: space-between; color: #aaa; font-size: 0.9rem; }
+        .match-score { font-size: 1.8rem; font-weight: bold; text-align: center; margin: 10px 0; }
         
-        /* YENİ SKOR GİRİŞİ TASARIMI */
-        .score-input-group { display: flex; align-items: center; gap: 10px; justify-content: center; background: #333; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
-        .score-input { width: 50px; padding: 10px; font-size: 1.2rem; text-align: center; border: none; border-radius: 5px; font-weight: bold; }
-        #score-a { background: #c0392b; color: white; } /* Kırmızı Takım */
-        #score-b { background: #2980b9; color: white; } /* Mavi Takım */
+        /* --- OYUNCU KARTLARI --- */
+        .players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; margin-top: 20px; }
+        .player-card { background: #1e1e1e; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #333; }
+        .player-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #555; }
+        .player-name { font-weight: bold; font-size: 0.95rem; }
+        .player-pos { font-size: 0.8rem; color: #888; }
 
-        .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .input-row input, .input-row select { flex: 1; padding: 8px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; }
-
-        /* SAHA TASARIMI */
-        .pitch-builder {
-            width: 100%; height: 500px;
-            background: linear-gradient(to bottom, #2e7d32, #388e3c);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 8px; position: relative;
-            display: flex; flex-direction: column; justify-content: space-evenly;
-            padding: 10px 0; margin-top: 10px;
-        }
-        .formation-row { display: flex; justify-content: center; gap: 15px; width: 100%; z-index: 2; }
-
-        /* OYUNCU SLOTU */
-        .player-slot { width: 55px; height: 90px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
-        .slot-circle { width: 45px; height: 45px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 2px dashed rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: rgba(255,255,255,0.5); overflow: hidden; }
-        .slot-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .slot-circle.filled { border: 2px solid white; background: #fff; }
-        .slot-name { font-size: 0.65rem; background: rgba(0,0,0,0.7); padding: 1px 4px; border-radius: 3px; margin-top: -5px; z-index: 3; text-align: center; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* GOL/ASİST INPUTLARI */
-        .stats-inputs { display: flex; gap: 2px; margin-top: 2px; }
-        .stat-box { width: 20px; font-size: 0.6rem; text-align: center; border: none; border-radius: 2px; }
-        .stat-g { background: #27ae60; color: white; }
-        .stat-a { background: #f39c12; color: white; }
-
-        /* --- OYUNCULAR SAYFASI --- */
-        .players-header { display: flex; justify-content: space-between; align-items: center; }
-        .players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; text-align: center; margin-top: 20px;}
-        .p-card { background: #1e1e1e; padding: 10px; border-radius: 8px; border: 1px solid #333; }
-        .p-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+        /* --- ADMIN ÖZEL ALANLARI (Başlangıçta Gizli) --- */
+        .admin-only { display: none; } /* En önemli kısım burası */
         
-        /* OYUNCU EKLEME PANELİ (GİZLİ) */
-        #player-creator-area { display: none; background: #2c3e50; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e74c3c; }
-        #player-creator-area h3 { margin-top: 0; color: #e74c3c; }
+        .admin-panel-box { background: #252525; padding: 15px; border: 1px solid #4caf50; border-radius: 8px; margin-bottom: 20px; }
+        .admin-btn { width: 100%; padding: 10px; background: #27ae60; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-bottom: 20px; }
+        .admin-btn:hover { background: #219150; }
 
-        /* MODAL VE DİĞERLERİ */
-        #player-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; align-items: center; justify-content: center; }
-        .modal-content { background: #222; padding: 20px; border-radius: 10px; width: 80%; max-height: 70%; overflow-y: auto; text-align: center; }
-        .modal-player-item { padding: 10px; border-bottom: 1px solid #444; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .modal-player-item:hover { background: #333; }
-        
-        .footer-admin { text-align: center; margin-top: 50px; font-size: 0.8rem; color: #333; cursor: pointer; }
-        #json-output-area { display: none; margin-top: 20px; }
-        #json-output { width: 100%; height: 100px; background: #000; color: #4caf50; font-family: monospace; font-size: 0.8rem; border: 1px solid #333; }
-    </style>
-</head>
-<body>
+        /* --- FORM ELEMANLARI --- */
+        input, select { width: 100%; padding: 10px; margin-bottom: 10px; background: #333; border: 1px solid #555; color: white; border-radius: 4px; box-sizing: border-box; }
+        .score-group { display: flex; gap: 10px; align-items: center; justify-content: center; }
+        .score-input { width: 60px; text-align: center; font-size: 1.2rem; font-weight: bold; }
 
-    <div class="navbar">
-        <button class="nav-btn active" onclick="showPage('home', this)">ANA SAYFA</button>
-        <button class="nav-btn" onclick="showPage('matches', this)">MAÇLAR</button>
-        <button class="nav-btn" onclick="showPage('players', this)">OYUNCULAR</button>
-    </div>
-
-    <div id="home" class="page-section active-section">
-        <div style="text-align: center; margin-top: 40px;">
-            <h1 style="color: #4caf50;">Halı Saha Ligi</h1>
-            <p>Resmi İstatistik ve Kadro Sitesi</p>
-            <div style="margin-top:30px; color:#888;">Son Maç: <span id="last-match-score">-</span></div>
-        </div>
+        /* --- JSON ÇIKTI KUTUSU --- */
+        .json-box { background: black
