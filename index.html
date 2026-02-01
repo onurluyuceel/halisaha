@@ -5,109 +5,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halı Saha Ligi</title>
     <style>
-        /* GENEL TASARIM */
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; }
+        /* GENEL AYARLAR */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background-color: #121212; color: white; padding-bottom: 50px; }
         
-        .header { text-align: center; padding: 20px; width: 100%; background: #1e1e1e; border-bottom: 2px solid #333; margin-bottom: 20px;}
-        .score-board { display: flex; justify-content: center; gap: 20px; align-items: center; font-size: 2rem; font-weight: bold; }
-        .score { color: #4caf50; }
+        /* NAVİGASYON (MENÜ) */
+        .navbar { display: flex; justify-content: center; background: #1e1e1e; padding: 15px; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
+        .nav-btn { background: none; border: none; color: #aaa; font-size: 1rem; margin: 0 15px; cursor: pointer; padding: 5px 10px; transition: 0.3s; }
+        .nav-btn:hover { color: white; }
+        .nav-btn.active { color: #4caf50; border-bottom: 2px solid #4caf50; font-weight: bold; }
 
-        /* SAHA */
-        .pitch {
-            width: 95%; max-width: 400px; height: 700px;
-            background: linear-gradient(to bottom, #2e7d32, #388e3c);
-            position: relative; border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 8px; margin-bottom: 20px;
-            display: flex; flex-direction: column;
-        }
+        /* SAYFA İÇERİKLERİ */
+        .page-section { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .active-section { display: block; }
+
+        /* ANA SAYFA STİLİ */
+        .welcome-box { text-align: center; margin-top: 50px; }
+        .welcome-box h1 { font-size: 2.5rem; color: #4caf50; }
+
+        /* OYUNCU LİSTESİ STİLİ */
+        .players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; text-align: center; }
+        .player-card { background: #1e1e1e; padding: 10px; border-radius: 8px; border: 1px solid #333; }
+        .player-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #555; }
+        .player-name { font-size: 0.9rem; margin-top: 5px; font-weight: bold; }
+        .player-pos { font-size: 0.75rem; color: #888; }
+
+        /* ADMIN PANELİ STİLİ */
+        .admin-controls { display: none; background: #2c3e50; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e74c3c; }
+        .admin-controls h3 { margin-top: 0; color: #e74c3c; }
+        .input-group { margin-bottom: 10px; display: flex; gap: 10px; }
+        input, select { padding: 8px; border-radius: 4px; border: none; width: 100%; }
+        button.add-btn { background: #27ae60; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; width: 100%; }
         
-        /* SAHA ÇİZGİLERİ */
-        .mid-line { position: absolute; top: 50%; width: 100%; height: 2px; background: rgba(255,255,255,0.3); }
-        .circle { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; transform: translate(-50%, -50%); }
+        /* JSON ÇIKTI KUTUSU */
+        #json-output-area { display: none; margin-top: 20px; background: #000; padding: 10px; border: 1px dashed #4caf50; color: #4caf50; font-family: monospace; font-size: 0.8rem; word-break: break-all; }
 
-        /* TAKIM ALANLARI */
-        .team-area { flex: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 10px 0; z-index: 2; }
-        .team-top { flex-direction: column; } 
-        .team-bottom { flex-direction: column-reverse; } /* Alttaki takımın kalecisi en alta gelsin diye */
-
-        .row { display: flex; justify-content: center; gap: 15px; width: 100%; }
-
-        /* OYUNCU KARTI */
-        .player-card { display: flex; flex-direction: column; align-items: center; position: relative; width: 60px; cursor: pointer; transition: transform 0.2s; }
-        .player-card:hover { transform: scale(1.1); }
-        
-        .p-img { width: 45px; height: 45px; background: #ddd; border-radius: 50%; border: 2px solid #fff; object-fit: cover; }
-        .p-name { font-size: 0.7rem; color: white; background: rgba(0,0,0,0.6); padding: 2px 5px; border-radius: 4px; margin-top: -5px; z-index: 3; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-        
-        .stat-badge { position: absolute; top: 0; right: 0; background: #f39c12; color: #fff; font-size: 0.6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid white;}
-
-        /* YÜKLENİYOR MESAJI */
-        #loading { margin-top: 20px; color: #aaa; }
+        /* GİZLİ FOOTER */
+        .footer-admin { text-align: center; margin-top: 50px; font-size: 0.8rem; color: #333; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div>HAFTANIN MAÇI</div>
-        <div class="score-board">
-            <span>A TAKIMI</span>
-            <span class="score">0 - 0</span>
-            <span>B TAKIMI</span>
+    <div class="navbar">
+        <button class="nav-btn active" onclick="showPage('home', this)">ANA SAYFA</button>
+        <button class="nav-btn" onclick="showPage('matches', this)">MAÇLAR</button>
+        <button class="nav-btn" onclick="showPage('players', this)">OYUNCULAR</button>
+    </div>
+
+    <div id="home" class="page-section active-section">
+        <div class="welcome-box">
+            <h1>HOŞ GELDİNİZ</h1>
+            <p>Halı Saha Ligi Resmi Web Sitesi</p>
+            <p style="color:#888;">Bu haftanın maçı için "Maçlar" sekmesine göz atın.</p>
         </div>
     </div>
 
-    <div id="loading">Veriler Yükleniyor...</div>
-
-    <div class="pitch" id="pitch" style="display:none;">
-        <div class="mid-line"></div>
-        <div class="circle"></div>
-
-        <div class="team-area team-top" id="team-a"></div>
-
-        <div class="team-area team-bottom" id="team-b"></div>
+    <div id="matches" class="page-section">
+        <h2>Maç Fikstürü</h2>
+        <p style="color:#888;">Henüz oynanmış maç verisi girilmedi.</p>
+        
+        <div class="admin-controls" id="admin-match-panel">
+            <h3>Yönetici: Maç Ekle</h3>
+            <p style="font-size:0.8rem;">Şimdilik sadece oyuncu ekleme aktif.</p>
+        </div>
     </div>
 
+    <div id="players" class="page-section">
+        
+        <div class="admin-controls" id="admin-player-panel">
+            <h3> + Yeni Oyuncu Ekle</h3>
+            <div class="input-group">
+                <input type="text" id="new-name" placeholder="İsim (Örn: Ahmet)">
+                <select id="new-pos">
+                    <option value="GK">Kaleci (GK)</option>
+                    <option value="DEF">Defans (DEF)</option>
+                    <option value="OS">Orta Saha (OS)</option>
+                    <option value="FW">Forvet (FW)</option>
+                </select>
+            </div>
+            <button class="add-btn" onclick="generatePlayerJson()">JSON KODU OLUŞTUR</button>
+            
+            <div id="json-output-area">
+                <p>Aşağıdaki kodu kopyala ve GitHub'daki players.json dosyasının EN SONUNA (köşeli parantezden önce) yapıştır:</p>
+                <textarea id="json-result" style="width:100%; height:80px; background:#111; color:#fff; border:none;"></textarea>
+            </div>
+        </div>
+
+        <h2>Oyuncu Kadrosu</h2>
+        <div id="loading">Veriler Yükleniyor...</div>
+        <div class="players-grid" id="players-container"></div>
+    </div>
+
+    <div class="footer-admin" onclick="adminLogin()">Yönetici Girişi</div>
+
     <script>
-        // GitHub'daki players.json dosyasını çekiyoruz
+        // 1. SAYFA GEÇİŞLERİ
+        function showPage(pageId, btn) {
+            // Tüm sayfaları gizle
+            document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active-section'));
+            // Tüm butonların aktifliğini kaldır
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            // Seçileni aç
+            document.getElementById(pageId).classList.add('active-section');
+            btn.classList.add('active');
+        }
+
+        // 2. OYUNCULARI ÇEK VE LİSTELE
+        let allPlayers = []; // Oyuncuları hafızada tutalım
+
         fetch('players.json')
             .then(response => response.json())
-            .then(players => {
+            .then(data => {
+                allPlayers = data;
+                renderPlayers(data);
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('pitch').style.display = 'flex';
-                
-                // Şimdilik test için manuel dağıtıyorum. 
-                // İleride burayı "Match Data" dosyasından okutacağız.
-                const teamA = players.slice(0, 2); // İlk 2 oyuncu A takımına (Örnek)
-                const teamB = players.slice(2, 4); // Sonraki 2 oyuncu B takımına (Örnek)
-
-                renderTeam('team-a', teamA);
-                renderTeam('team-b', teamB);
             })
-            .catch(error => {
-                document.getElementById('loading').innerHTML = "Veri çekilemedi :( players.json dosyasını kontrol et.";
-                console.error('Hata:', error);
+            .catch(err => {
+                document.getElementById('loading').innerHTML = "Veri okunamadı. JSON dosyasını kontrol et.";
+                console.error(err);
             });
 
-        // Oyuncuları Ekrana Basan Fonksiyon
-        function renderTeam(elementId, teamPlayers) {
-            const container = document.getElementById(elementId);
-            
-            // Basitçe tek satırda gösteriyoruz şimdilik, sonra 1-3-3-1 sistemine dökeceğiz
-            const row = document.createElement('div');
-            row.className = 'row';
+        function renderPlayers(players) {
+            const container = document.getElementById('players-container');
+            container.innerHTML = ''; // Temizle
 
-            teamPlayers.forEach(p => {
-                const playerHtml = `
-                    <div class="player-card" onclick="alert('${p.name} - Gol: ${p.goals}')">
-                        <img src="${p.image}" class="p-img">
-                        ${p.rating ? `<div class="stat-badge">${p.rating}</div>` : ''}
-                        <div class="p-name">${p.name}</div>
+            players.forEach(p => {
+                // Renk kodlaması
+                let posColor = '#888';
+                if(p.position === 'GK') posColor = '#e67e22'; // Turuncu
+                if(p.position === 'DEF') posColor = '#3498db'; // Mavi
+                if(p.position === 'FW') posColor = '#e74c3c'; // Kırmızı
+
+                const html = `
+                    <div class="player-card">
+                        <img src="${p.image}" class="player-img" onerror="this.src='https://via.placeholder.com/150'">
+                        <div class="player-name">${p.name}</div>
+                        <div class="player-pos" style="color:${posColor}">${p.position}</div>
+                        <div style="font-size:0.7rem; color:#aaa; margin-top:5px;">Puan: ${p.rating}</div>
                     </div>
                 `;
-                row.innerHTML += playerHtml;
+                container.innerHTML += html;
             });
+        }
 
-            container.appendChild(row);
+        // 3. ADMIN GİRİŞ SİSTEMİ
+        function adminLogin() {
+            const pass = prompt("Yönetici Şifresi Nedir?");
+            if(pass === "1234") { // Şifreyi buradan değiştirebilirsin
+                alert("Hoşgeldin Başkan! Ekleme panelleri açıldı.");
+                document.getElementById('admin-player-panel').style.display = 'block';
+                document.getElementById('admin-match-panel').style.display = 'block';
+                localStorage.setItem('isAdmin', true); // Hatırla
+            } else {
+                alert("Hatalı şifre.");
+            }
+        }
+
+        // Eğer daha önce giriş yaptıysa hatırla
+        if(localStorage.getItem('isAdmin')) {
+            document.getElementById('admin-player-panel').style.display = 'block';
+            document.getElementById('admin-match-panel').style.display = 'block';
+        }
+
+        // 4. JSON OLUŞTURUCU (MANUEL EKLEME İÇİN)
+        function generatePlayerJson() {
+            const name = document.getElementById('new-name').value;
+            const pos = document.getElementById('new-pos').value;
+            
+            // Yeni ID üret (Mevcutların en büyüğü + 1)
+            const newId = allPlayers.length > 0 ? Math.max(...allPlayers.map(p => p.id)) + 1 : 1;
+
+            if(!name) { alert("İsim yazmadın!"); return; }
+
+            // JSON formatı oluştur
+            const newObj = {
+                id: newId,
+                name: name,
+                image: "https://i.pravatar.cc/150?u=" + newId, // Otomatik avatar
+                position: pos,
+                rating: 6.0, // Başlangıç puanı
+                goals: 0
+            };
+
+            const jsonString = ",\n" + JSON.stringify(newObj, null, 2);
+            
+            document.getElementById('json-output-area').style.display = 'block';
+            document.getElementById('json-result').value = jsonString;
         }
     </script>
 
