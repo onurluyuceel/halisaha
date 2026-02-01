@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haftanın Maçı</title>
+    <style>
+        /* GENEL AYARLAR */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; }
+        
+        /* ÜST BİLGİ VE SKORBOARD */
+        .header { text-align: center; padding: 20px; width: 100%; max-width: 600px; background: #1e1e1e; margin-bottom: 10px; border-bottom: 2px solid #333; }
+        .match-date { font-size: 0.9rem; color: #aaa; margin-bottom: 5px; }
+        .score-board { display: flex; justify-content: space-between; align-items: center; font-size: 2.5rem; font-weight: bold; padding: 10px 0; }
+        .team-name { font-size: 1rem; font-weight: normal; color: #ccc; }
+        .score { color: #4caf50; letter-spacing: 5px; }
+
+        /* SAHA TASARIMI (DİKEY) */
+        .pitch {
+            width: 100%;
+            max-width: 500px;
+            height: 800px; /* Sahanın uzunluğu */
+            background: linear-gradient(to bottom, #2e7d32 0%, #388e3c 50%, #2e7d32 100%); /* Çim Efekti */
+            position: relative;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        /* SAHA ÇİZGİLERİ */
+        .center-line { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.3); }
+        .center-circle { position: absolute; top: 50%; left: 50%; width: 80px; height: 80px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; transform: translate(-50%, -50%); }
+        .penalty-area-top { position: absolute; top: 0; left: 50%; width: 200px; height: 100px; border: 2px solid rgba(255,255,255,0.3); border-top: none; transform: translateX(-50%); }
+        .penalty-area-bottom { position: absolute; bottom: 0; left: 50%; width: 200px; height: 100px; border: 2px solid rgba(255,255,255,0.3); border-bottom: none; transform: translateX(-50%); }
+
+        /* OYUNCU YERLEŞİMİ (FLEXBOX İLE) */
+        .team-container { flex: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 20px 0; z-index: 2; }
+        
+        /* A Takımı (Üst - Ters Diziliş: Kaleci En Üstte) */
+        .team-top { flex-direction: column; } 
+        /* B Takımı (Alt - Düz Diziliş: Kaleci En Altta) */
+        .team-bottom { flex-direction: column-reverse; }
+
+        .line { display: flex; justify-content: center; gap: 20px; width: 100%; }
+
+        /* OYUNCU KARTI */
+        .player { display: flex; flex-direction: column; align-items: center; position: relative; width: 60px; }
+        .player-img { width: 45px; height: 45px; background-color: #ddd; border-radius: 50%; border: 2px solid #fff; object-fit: cover; }
+        .player-name { font-size: 0.75rem; text-align: center; color: white; text-shadow: 1px 1px 2px black; margin-top: 4px; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px; }
+        
+        /* GOL & PUAN ROZETİ */
+        .badge {
+            position: absolute; top: -5px; right: 0;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid white;
+        }
+        .goal-badge { background-color: #2ecc71; color: white; } /* Yeşil: Gol */
+        .rating-badge { background-color: #f39c12; color: white; top: -5px; left: 0;} /* Turuncu: Puan */
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="match-date">BU HAFTANIN MAÇI - 01.02.2026</div>
+        <div class="score-board">
+            <div class="team-name">ÇILGINLAR SK</div>
+            <div class="score">5 - 3</div>
+            <div class="team-name">EFSANELER FC</div>
+        </div>
+        <small style="color:#888;">Halı Saha Arena</small>
+    </div>
+
+    <div class="pitch">
+        <div class="center-line"></div>
+        <div class="center-circle"></div>
+        <div class="penalty-area-top"></div>
+        <div class="penalty-area-bottom"></div>
+
+        <div class="team-container team-top">
+            <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=1" class="player-img">
+                    <div class="player-name">Uğurcan</div>
+                    <div class="badge rating-badge">7.5</div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=2" class="player-img">
+                    <div class="player-name">Serdar</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=3" class="player-img">
+                    <div class="player-name">Merih</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=4" class="player-img">
+                    <div class="player-name">Çağlar</div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=5" class="player-img">
+                    <div class="player-name">Hakan</div>
+                    <div class="badge goal-badge">⚽</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=6" class="player-img">
+                    <div class="player-name">Orkun</div>
+                </div>
+            </div>
+             <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=7" class="player-img">
+                    <div class="player-name">Cengiz</div>
+                    <div class="badge goal-badge">⚽⚽</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=8" class="player-img">
+                    <div class="player-name">Barış</div>
+                    <div class="badge rating-badge">8.1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-container team-bottom">
+            <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=11" class="player-img">
+                    <div class="player-name">Mert</div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=12" class="player-img">
+                    <div class="player-name">Ferdi</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=13" class="player-img">
+                    <div class="player-name">Abdül</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=14" class="player-img">
+                    <div class="player-name">Zeki</div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=15" class="player-img">
+                    <div class="player-name">İsmail</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=16" class="player-img">
+                    <div class="player-name">Salih</div>
+                    <div class="badge goal-badge">⚽</div>
+                </div>
+            </div>
+             <div class="line">
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=17" class="player-img">
+                    <div class="player-name">Semih</div>
+                    <div class="badge goal-badge">⚽</div>
+                </div>
+                <div class="player">
+                    <img src="https://i.pravatar.cc/150?u=18" class="player-img">
+                    <div class="player-name">Kerem</div>
+                    <div class="badge goal-badge">⚽</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
