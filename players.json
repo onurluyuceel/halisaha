@@ -1,162 +1,22 @@
 [
-  {
-    "id": 1,
-    "name": "Onur",
-    "image": "https://i.pravatar.cc/150?u=1",
-    "position": "FW",
-    "rating": 7.5,
-    "goals": 0
-  },
-  {
-    "id": 2,
-    "name": "İkbal",
-    "image": "https://i.pravatar.cc/150?u=2",
-    "position": "OS",
-    "rating": 6.8,
-    "goals": 1
-  },
-  {
-    "id": 3,
-    "name": "Yılmaz",
-    "image": "https://i.pravatar.cc/150?u=3",
-    "position": "OS",
-    "rating": 7.2,
-    "goals": 0
-  },
-  {
-    "id": 4,
-    "name": "Eray",
-    "image": "https://i.pravatar.cc/150?u=7",
-    "position": "DEF",
-    "rating": 8.1,
-    "goals": 12
-  }
-  {
-    "id": 5,
-    "name": "Can",
-    "image": "https://i.pravatar.cc/150?u=1",
-    "position": "DEF",
-    "rating": 7.5,
-    "goals": 0
-  },
-  {
-    "id": 6,
-    "name": "İmam",
-    "image": "https://i.pravatar.cc/150?u=2",
-    "position": "DEF",
-    "rating": 6.8,
-    "goals": 1
-  },
-  {
-    "id": 7,
-    "name": "Yağız",
-    "image": "https://i.pravatar.cc/150?u=3",
-    "position": "DEF",
-    "rating": 7.2,
-    "goals": 0
-  },
-  {
-    "id": 8,
-    "name": "Messi",
-    "image": "https://i.pravatar.cc/150?u=7",
-    "position": "OS",
-    "rating": 8.1,
-    "goals": 12
-  }
-  {
-    "id": 9,
-    "name": "Cürül",
-    "image": "https://i.pravatar.cc/150?u=1",
-    "position": "FW",
-    "rating": 7.5,
-    "goals": 0
-  },
-  {
-    "id": 10,
-    "name": "İkbal",
-    "image": "https://i.pravatar.cc/150?u=2",
-    "position": "OS",
-    "rating": 6.8,
-    "goals": 1
-  },
-  {
-    "id": 11,
-    "name": "Mert",
-    "image": "https://i.pravatar.cc/150?u=3",
-    "position": "DEF",
-    "rating": 7.2,
-    "goals": 0
-  },
-  {
-    "id": 12,
-    "name": "Ömer",
-    "image": "https://i.pravatar.cc/150?u=7",
-    "position": "OS",
-    "rating": 8.1,
-    "goals": 12
-  }
-  {
-    "id": 13,
-    "name": "Hakkı",
-    "image": "https://i.pravatar.cc/150?u=1",
-    "position": "DEF",
-    "rating": 7.5,
-    "goals": 0
-  },
-  {
-    "id": 14,
-    "name": "Sülo",
-    "image": "https://i.pravatar.cc/150?u=2",
-    "position": "OS",
-    "rating": 6.8,
-    "goals": 1
-  },
-  {
-    "id": 15,
-    "name": "Erenay",
-    "image": "https://i.pravatar.cc/150?u=3",
-    "position": "DEF",
-    "rating": 7.2,
-    "goals": 0
-  },
-  {
-    "id": 16,
-    "name": "Ömer",
-    "image": "https://i.pravatar.cc/150?u=7",
-    "position": "GK",
-    "rating": 8.1,
-    "goals": 12
-  }
-  {
-    "id": 17,
-    "name": "TrabzonluKaleci",
-    "image": "https://i.pravatar.cc/150?u=1",
-    "position": "GK",
-    "rating": 7.5,
-    "goals": 0
-  },
-  {
-    "id": 18,
-    "name": "Yashin",
-    "image": "https://i.pravatar.cc/150?u=2",
-    "position": "GK",
-    "rating": 6.8,
-    "goals": 1
-  },
-  {
-    "id": 19,
-    "name": "Serdar",
-    "image": "https://i.pravatar.cc/150?u=3",
-    "position": "OS",
-    "rating": 7.2,
-    "goals": 0
-  },
-  {
-    "id": 20,
-    "name": "Cubun",
-    "image": "https://i.pravatar.cc/150?u=7",
-    "position": "DEF",
-    "rating": 8.1,
-    "goals": 12
-  }
+  { "id": 1, "name": "Onur", "image": "https://i.pravatar.cc/150?u=1", "position": "FW", "rating": 7.5, "goals": 0 },
+  { "id": 2, "name": "İkbal", "image": "https://i.pravatar.cc/150?u=2", "position": "OS", "rating": 6.8, "goals": 1 },
+  { "id": 3, "name": "Yılmaz", "image": "https://i.pravatar.cc/150?u=3", "position": "OS", "rating": 7.2, "goals": 0 },
+  { "id": 4, "name": "Eray", "image": "https://i.pravatar.cc/150?u=4", "position": "DEF", "rating": 8.1, "goals": 12 },
+  { "id": 5, "name": "Can", "image": "https://i.pravatar.cc/150?u=5", "position": "DEF", "rating": 7.5, "goals": 0 },
+  { "id": 6, "name": "İmam", "image": "https://i.pravatar.cc/150?u=6", "position": "DEF", "rating": 6.8, "goals": 1 },
+  { "id": 7, "name": "Yağız", "image": "https://i.pravatar.cc/150?u=8", "position": "DEF", "rating": 7.2, "goals": 0 },
+  { "id": 8, "name": "Messi", "image": "https://i.pravatar.cc/150?u=9", "position": "OS", "rating": 8.1, "goals": 12 },
+  { "id": 9, "name": "Cürül", "image": "https://i.pravatar.cc/150?u=10", "position": "FW", "rating": 7.5, "goals": 0 },
+  { "id": 10, "name": "İkbal", "image": "https://i.pravatar.cc/150?u=11", "position": "OS", "rating": 6.8, "goals": 1 },
+  { "id": 11, "name": "Mert", "image": "https://i.pravatar.cc/150?u=12", "position": "DEF", "rating": 7.2, "goals": 0 },
+  { "id": 12, "name": "Ömer", "image": "https://i.pravatar.cc/150?u=13", "position": "OS", "rating": 8.1, "goals": 12 },
+  { "id": 13, "name": "Hakkı", "image": "https://i.pravatar.cc/150?u=14", "position": "DEF", "rating": 7.5, "goals": 0 },
+  { "id": 14, "name": "Sülo", "image": "https://i.pravatar.cc/150?u=15", "position": "OS", "rating": 6.8, "goals": 1 },
+  { "id": 15, "name": "Erenay", "image": "https://i.pravatar.cc/150?u=16", "position": "DEF", "rating": 7.2, "goals": 0 },
+  { "id": 16, "name": "Ömer GK", "image": "https://i.pravatar.cc/150?u=17", "position": "GK", "rating": 8.1, "goals": 0 },
+  { "id": 17, "name": "Trabzonlu", "image": "https://i.pravatar.cc/150?u=18", "position": "GK", "rating": 7.5, "goals": 0 },
+  { "id": 18, "name": "Yashin", "image": "https://i.pravatar.cc/150?u=19", "position": "GK", "rating": 6.8, "goals": 0 },
+  { "id": 19, "name": "Serdar", "image": "https://i.pravatar.cc/150?u=20", "position": "OS", "rating": 7.2, "goals": 0 },
+  { "id": 20, "name": "Cubun", "image": "https://i.pravatar.cc/150?u=21", "position": "DEF", "rating": 8.1, "goals": 12 }
 ]
